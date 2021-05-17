@@ -97,5 +97,6 @@ int main(int argc, char argv[]) {
 	}
 	_tprintf(TEXT("Number of Running Processes = %i\n"), listProcess.size());
 	printTree(listProcess.front(), 0);
+	std::system("pause");
 	return 0;
 }
