@@ -8,10 +8,21 @@
 
 const std::string INDENT = "|   ";
 
+/**
+* Print the info from a process like process name, id and parent id
+*
+* @param process Process structur shared ptr
+**/
 void printProcessInfo(std::shared_ptr<Process>& process) {
 	_tprintf(TEXT("+-%s (%lu) (%lu)\n"), process->name, process->id, process->parentId);
 }
 
+/**
+* Print the process tree
+*
+* @param rootProcess Process structur shared ptr root node
+* @param indent level of indentation to display
+**/
 void printTree(std::shared_ptr<Process>& rootProcess, unsigned int indent) {
 	std::string startingIndent = "";
 
@@ -25,6 +36,12 @@ void printTree(std::shared_ptr<Process>& rootProcess, unsigned int indent) {
 	}
 }
 
+/**
+* Convert a ProcessEntry32 struct to a Custom process node
+*
+* @param lppe ptr of the ProcessEntry32 to convert
+* @return shared_ptr<Process>
+**/
 std::shared_ptr<Process> convertToProcess(LPPROCESSENTRY32 lppe) {
 	std::shared_ptr<Process> toReturn = std::make_shared<Process>();
 
@@ -34,6 +51,12 @@ std::shared_ptr<Process> convertToProcess(LPPROCESSENTRY32 lppe) {
 	return toReturn;
 }
 
+/**
+* Add a process node to the list of process and in the tree hierarchy
+*
+* @param listProcess list of process where to add new node
+* @param process Process to add
+**/
 void addToProcessParent(std::list<std::shared_ptr<Process>>& listProcess, std::shared_ptr<Process> process) {
 	bool add = false;
 	for (auto& current : listProcess) {
@@ -72,11 +95,6 @@ int main(int argc, char argv[]) {
 		std::cerr << "An error occurred while reading process info" << std::endl;
 		return 84;
 	}
-
-	/*for (auto& pro : listProcess) {
-		printProcessInfo(pro);
-	}*/
-
 	_tprintf(TEXT("Number of Running Processes = %i\n"), listProcess.size());
 	printTree(listProcess.front(), 0);
 	return 0;
